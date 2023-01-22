@@ -1,6 +1,10 @@
 class Solution:
-    def fib(self, N: int) -> int:
-    	a, b = 0, 1
-    	for i in range(N): a, b = b, a + b
-    	return a
+    def fib(self, n: int, cache={}) -> int:
+        if n < 2:
+            return n
         
+        if n in cache:
+            return cache[n]
+
+        cache[n] = self.fib(n-1, cache) + self.fib(n-2, cache)
+        return cache[n]
