@@ -1,9 +1,12 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        
-        ans = collections.defaultdict(list)
-        
+        mapAgm = {}
         for s in strs:
-            ans[tuple(sorted(s))].append(s)           
-        return ans.values()
-                    
+            if tuple(sorted(s)) in mapAgm.keys():
+                mapAgm[tuple(sorted(s))].append(s)
+            else:
+                mapAgm[tuple(sorted(s))] = [s]
+        return mapAgm.values()
+
+
+        
