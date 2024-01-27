@@ -1,16 +1,18 @@
+from collections import deque
 class Solution:
     def backspaceCompare(self, s: str, t: str) -> bool:
-        ls = []
-        lt = []
-        for i in s:
-            if ls == [] and i == '#': continue
-            if i == '#': ls.pop()
-            else: ls.append(i)
-        for i in t:
-            if lt == [] and i == '#': continue
-            if i == '#': lt.pop()
-            else: lt.append(i)
+        strS, strT = deque(), deque()
+        for char in s:
+            if char == "#":
+                if not strS: continue
+                strS.pop()
+            else:
+                strS.append(char)
+        for char in t:
+            if char == "#":
+                if not strT: continue
+                strT.pop()
+            else:
+                strT.append(char)
+        return strS == strT
         
-        if ls == lt: return True
-        else: return False
-            
