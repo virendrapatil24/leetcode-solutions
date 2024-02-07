@@ -1,15 +1,14 @@
 class Solution:
     def frequencySort(self, s: str) -> str:
-        sMap = {}
+        map_freq = {}
         for char in s:
-            if char in sMap:
-                sMap[char] += 1
-            else:
-                sMap[char] = 1
-        newMap = sorted(sMap.items(), key=lambda item:item[1], reverse=True)
-
+            map_freq[char] = map_freq.get(char, 0) + 1
+        heap = [(-v, k) for k, v in map_freq.items()]
+        heapify(heap)
         res = ""
-        for k, v in newMap:
-            res += k * v
+        while heap:
+            v, k = heappop(heap)
+            res += -v * k
+        return res        
 
-        return res 
+        
