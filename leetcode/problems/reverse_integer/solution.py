@@ -1,15 +1,7 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        y =  str(x)
-        if y[0] == '-':
-            a = '-' + y[:0:-1]
-        else:
-            a = y[::-1]
-        
-        b = int(a)
-        
-        if -2 ** 31 < b  and b < 2 ** 31 - 1:
-            return b
-        else: return 0
+        if x < 0: res = -int(str(x)[-1:0:-1])
+        else: res = int(str(x)[::-1])
+        return res if -2 ** 31 < res  and res < 2 ** 31 - 1 else 0
 
-            
+        
