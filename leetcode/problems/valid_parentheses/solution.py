@@ -9,5 +9,4 @@ class Solution:
             elif len(stack) == 0 or isMatch[stack.pop()] != char: 
                 return False
         return len(stack) == 0
-                
         
