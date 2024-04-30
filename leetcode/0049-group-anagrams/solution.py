@@ -4,6 +4,3 @@ class Solution:
         for s in strs:
             mapAgm[tuple(sorted(s))] = mapAgm.get(tuple(sorted(s)), []) +[s]
         return mapAgm.values()
-
-
-        
