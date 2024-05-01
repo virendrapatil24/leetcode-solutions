@@ -1,6 +1,7 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        mapAgm = {}
-        for s in strs:
-            mapAgm[tuple(sorted(s))] = mapAgm.get(tuple(sorted(s)), []) +[s]
-        return mapAgm.values()
+        map_angm = {}
+        for strg in strs:
+            map_angm[tuple(sorted(strg))] = map_angm.get(tuple(sorted(strg)), []) + [strg]
+        return map_angm.values()
+
