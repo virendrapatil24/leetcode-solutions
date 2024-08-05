@@ -1,10 +1,5 @@
-class Solution(object):
-    def kthDistinct(self, arr, k):
-        """
-        :type arr: List[str]
-        :type k: int
-        :rtype: str
-        """
+class Solution:
+    def kthDistinct(self, arr: List[str], k: int) -> str:
         arr_map = {}
         for char in arr:
             arr_map[char] = arr_map.get(char, 0) + 1
@@ -15,4 +10,3 @@ class Solution(object):
                 if count == k:
                     return char
         return ""
-        
