@@ -6,6 +6,3 @@ class Solution:
                 map_sum[target - num] = idx
             else:
                 return [idx, map_sum[num]]
-
-
-        
