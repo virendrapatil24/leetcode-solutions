@@ -1,18 +1,17 @@
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         res = []
-        stack = []
-        visited = [0] * len(nums)
-        def rec_per(stack, visited):
-            if len(stack) == len(nums):
-                res.append(stack[:])
-            for i in range(len(nums)):
-                if not visited[i]:
-                    visited[i] = 1
-                    stack.append(nums[i])
-                    rec_per(stack, visited)
-                    stack.pop()
-                    visited[i] = 0
-        rec_per(stack, visited)
+        def rec_per(i, j):
+            if i == j == len(nums):
+                res.append(nums[:])
+                # return
+            for i in range(j, len(nums)):
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
+                j += 1
+                rec_per(i, j)
+                i -= 1
+                j -= 1
+                nums[i], nums[j] = nums[j], nums[i]
+        rec_per(0, 0)
         return res
-        
