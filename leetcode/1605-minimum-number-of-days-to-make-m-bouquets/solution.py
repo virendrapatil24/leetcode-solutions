@@ -1,21 +1,34 @@
 class Solution:
     def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
-        l, r = 1, 1000000000
-        ans = -1
+        if m * k > len(bloomDay):
+            return -1
+        l, r = min(bloomDay), max(bloomDay)
+        res = max(bloomDay)
         while l <= r:
-            mid = l + (r - l) // 2
-            consecutive_length, bouquets = 0, 0
-            for bloom in bloomDay:
-                if bloom <= mid:
-                    consecutive_length += 1
-                    if consecutive_length >= k:
-                        consecutive_length = 0
-                        bouquets += 1
-                else:
-                    consecutive_length = 0
+            mid = (l + r) // 2
+            bouquets = self.is_valid(bloomDay, mid, m, k)
             if bouquets >= m:
-                ans = mid
+                res = mid
                 r = mid - 1
             else:
                 l = mid + 1
-        return ans
+        return res
+
+    def is_valid(self, bloomDay, min_day, m, k):
+        bouquets = 0
+        adj_flowers = 0
+        for day in bloomDay:
+            if min_day >= day:
+                adj_flowers += 1
+                if adj_flowers == k:
+                    bouquets += 1
+                    adj_flowers = 0
+            else:
+                adj_flowers = 0
+        # print(min_day, bouquets)
+        return bouquets
+
+
+
+
+        
