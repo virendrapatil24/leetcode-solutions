@@ -1,53 +1,30 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 class Solution:
-    def constructFromPrePost(
-        self, preorder: List[int], postorder: List[int]
-    ) -> Optional[TreeNode]:
-        num_of_nodes = len(preorder)
-        return self._construct_tree(0, num_of_nodes - 1, 0, preorder, postorder)
+    def constructFromPrePost(self, preorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+        n = len(postorder)
+        post_idx_map = {}
+        for i, val in enumerate(postorder):
+            post_idx_map[val] = i
+        
+        def build(i1, i2, j1, j2):
+            if i1 > i2 or j1 > j2:
+                return None
 
-    # Helper function to construct the tree recursively
-    def _construct_tree(
-        self,
-        pre_start: int,
-        pre_end: int,
-        post_start: int,
-        preorder: List[int],
-        postorder: List[int],
-    ) -> Optional[TreeNode]:
-        # Base case: If there are no nodes to process, return None
-        if pre_start > pre_end:
-            return None
+            root = TreeNode(preorder[i1])
+            if i1 != i2:
+                left_val = preorder[i1 + 1]
+                mid = post_idx_map[left_val]
+                left_size = mid - j1 + 1
+                root.left = build(i1 + 1, i1 + left_size, j1, mid)
+                root.right = build(i1 + left_size + 1, i2, mid + 1, j2 - 1)
 
-        # Base case: If only one node is left, return that node
-        if pre_start == pre_end:
-            return TreeNode(preorder[pre_start])
+            return root
+        
+        return build(0, n - 1, 0, n - 1)
 
-        # The left child root in preorder traversal (next element after root)
-        left_root = preorder[pre_start + 1]
-
-        # Calculate the number of nodes in the left subtree by searching in postorder
-        num_of_nodes_in_left = 1
-        while postorder[post_start + num_of_nodes_in_left - 1] != left_root:
-            num_of_nodes_in_left += 1
-
-        root = TreeNode(preorder[pre_start])
-
-        # Recursively construct the left subtree
-        root.left = self._construct_tree(
-            pre_start + 1,
-            pre_start + num_of_nodes_in_left,
-            post_start,
-            preorder,
-            postorder,
-        )
-
-        # Recursively construct the right subtree
-        root.right = self._construct_tree(
-            pre_start + num_of_nodes_in_left + 1,
-            pre_end,
-            post_start + num_of_nodes_in_left,
-            preorder,
-            postorder,
-        )
-
-        return root
+        
