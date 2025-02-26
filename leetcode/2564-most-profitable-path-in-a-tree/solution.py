@@ -1,71 +1,41 @@
 class Solution:
-    def __init__(self):
-        self.bob_path = {}
-        self.visited = []
-        self.tree = []
-        self.max_income = float("-inf")
+    def mostProfitablePath(self, edges: List[List[int]], bob: int, amount: List[int]) -> int:
 
-    def mostProfitablePath(self, edges, bob, amount):
-        n = len(amount)
-        self.tree = [[] for _ in range(n)]
-        self.bob_path = {}
-        self.visited = [False] * n
-
-        # Form tree with edges
-        for edge in edges:
-            self.tree[edge[0]].append(edge[1])
-            self.tree[edge[1]].append(edge[0])
-
-        # Find the path taken by Bob to reach node 0 and the times it takes to get there
-        self.find_bob_path(bob, 0)
-
-        # Find Alice's optimal path
-        self.visited = [False] * n
-        self.find_alice_path(0, 0, 0, amount)
-
-        return self.max_income
-
-    # Depth First Search to find Bob's path
-    def find_bob_path(self, source_node, time):
-        # Mark and set time node is reached
-        self.bob_path[source_node] = time
-        self.visited[source_node] = True
-
-        # Destination for Bob is found
-        if source_node == 0:
-            return True
-
-        # Traverse through unvisited nodes
-        for adjacent_node in self.tree[source_node]:
-            if not self.visited[adjacent_node] and self.find_bob_path(
-                adjacent_node, time + 1
-            ):
+        graph = {}
+        for u, v in edges:
+            graph[u] = graph.get(u, []) + [v]
+            graph[v] = graph.get(v, []) + [u]
+        
+        bob_path_time_map = {}
+        def dfs(src, prev, time):
+            if src == 0:
+                bob_path_time_map[src] = time
                 return True
+            
+            for nei in graph[src]:
+                if nei == prev:
+                    continue
+                if dfs(nei, src, time + 1):
+                    bob_path_time_map[src] = time
+                    return True
+            return False
+        dfs(bob, -1, 0)
 
-        # If node 0 isn't reached, remove current node from path
-        self.bob_path.pop(source_node, None)
-        return False
+        q = deque([(0, 0, -1, amount[0])])
+        res = -inf
+        while q:
+            node, time, parent, profit = q.popleft()
+            for nei in graph[node]:
+                if nei == parent:
+                    continue
+                nei_profit = amount[nei]
+                if nei in bob_path_time_map:
+                    if time + 1 > bob_path_time_map[nei]:
+                        nei_profit = 0
+                    if time + 1 == bob_path_time_map[nei]:
+                        nei_profit //= 2
+                q.append((nei, time + 1, node, profit + nei_profit))
+                if len(graph[nei]) == 1:
+                    res = max(res, profit + nei_profit)
 
-    # Depth First Search to find Alice's optimal path
-    def find_alice_path(self, source_node, time, income, amount):
-        # Mark node as explored
-        self.visited[source_node] = True
-
-        # Alice reaches the node first
-        if (
-            source_node not in self.bob_path
-            or time < self.bob_path[source_node]
-        ):
-            income += amount[source_node]
-        # Alice and Bob reach the node at the same time
-        elif time == self.bob_path[source_node]:
-            income += amount[source_node] // 2
-
-        # Update max value if current node is a new leaf
-        if len(self.tree[source_node]) == 1 and source_node != 0:
-            self.max_income = max(self.max_income, income)
-
-        # Traverse through unvisited nodes
-        for adjacent_node in self.tree[source_node]:
-            if not self.visited[adjacent_node]:
-                self.find_alice_path(adjacent_node, time + 1, income, amount)
+        return res
