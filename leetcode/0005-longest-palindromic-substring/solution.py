@@ -2,13 +2,17 @@ class Solution:
     def longestPalindrome(self, s: str) -> str:
         res = ""
         for i in range(len(s)):
-            for j in range(i, len(s)):
-                new_s = s[i:j + 1]
-                is_palindrome = self.is_palindrome(new_s)
-                if is_palindrome and len(new_s) > len(res):
-                    res = new_s
+            temp = self.max_len_palindrome(s, i, i)
+            if len(temp) > len(res):
+                res = temp
+            temp = self.max_len_palindrome(s, i, i + 1)
+            if len(temp) > len(res):
+                res = temp
         return res
-
-    def is_palindrome(self, s):
-        return s == s[::-1]
+        
+    def max_len_palindrome(self, s, l, r):
+        while l >= 0 and r < len(s) and s[l] == s[r]:
+            l -= 1
+            r += 1
+        return s[l + 1:r]
         
