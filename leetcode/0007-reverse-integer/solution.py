@@ -12,5 +12,5 @@ class Solution:
         else:
             res = reverse_num(x)
         
-        return res if -2**31 < res < 2**31 - 1 else 0
+        return res if -2 ** 31 < res < 2 ** 31 - 1 else 0
         
