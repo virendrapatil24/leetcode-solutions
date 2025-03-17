@@ -1,20 +1,18 @@
 class Solution:
     def repairCars(self, ranks: List[int], cars: int) -> int:
-        freq=Counter(ranks)
-        minR=min(ranks)
-        def canRepair(t):
-            cnt=0
-            for x, f in freq.items():
-                cnt+=f*(sqrt(t/x)//1)
-                if cnt>=cars: return True
-            return cnt>=cars
-        
-        l, r=1, minR*cars*cars
-        while l<r:
-            m=(l+r)>>1
-            if canRepair(m):
-                r=m
+        l, r = 1, min(ranks) * cars * cars
+        while l <= r:
+            m = (l + r) // 2
+            if self.is_possible(ranks, cars, m):
+                r = m - 1
             else:
-                l=m+1
+                l = m + 1
         return l
+    
+    def is_possible(self, ranks, cars, m):
+        count = 0
+        for rank in ranks:
+            count += int(((m / rank) ** 0.5))
+        return count >= cars
+
         
