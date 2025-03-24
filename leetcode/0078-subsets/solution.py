@@ -1,11 +1,20 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
+        n = len(nums)
         res = []
-        def create_subset(idx, temp):
-            res.append(temp)
-            for i in range(idx, len(nums)):
-                create_subset(i + 1, temp + [nums[i]])
-        create_subset(0, [])
+
+        def dfs(stack, idx):
+            if idx == n:
+                res.append(stack[:])
+                return 
+
+            stack.append(nums[idx])
+            dfs(stack, idx + 1)
+
+            stack.pop()
+            dfs(stack, idx + 1)
+
+        dfs([], 0)
         return res
 
         
