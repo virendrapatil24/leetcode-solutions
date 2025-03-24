@@ -1,18 +1,19 @@
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        result = []
-        lenS = len(s)
-        def explore(index, curr):
-            if index >= lenS:
-                result.append(curr[:])
+        n = len(s)
+        res = []
+
+        def dfs(curr, idx):
+            if idx == n:
+                res.append(curr[:])
             
-            for i in range(index, lenS):
-                subStr = s[index : i + 1]
-                if subStr == subStr[::-1]:
-                    curr.append(subStr)
-                    explore(i + 1, curr)
+            for i in range(idx, n):
+                curr_sub_str = s[idx: i + 1]
+                if curr_sub_str == curr_sub_str[::-1]:
+                    curr.append(curr_sub_str)
+                    dfs(curr, i + 1)
                     curr.pop()
-            
-        explore(0, [])
-        return result
+        
+        dfs([], 0)
+        return res
         
